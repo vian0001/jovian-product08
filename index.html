@@ -14,34 +14,41 @@
             --accent-color: #ff3366;
             --code-bg: rgba(0, 10, 20, 0.8);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background-color: var(--dark-color);
             color: var(--light-color);
             line-height: 1.6;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 102, 255, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 60%, rgba(0, 255, 204, 0.1) 0%, transparent 20%),
-                linear-gradient(45deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 26, 51, 0.7) 100%),
-                url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZGVmcz4KPHBhdHRlcm4gaWQ9InBhdHRlcm4iIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxwYXRoIGQ9Ik0gMTAgMTAgTCAzMCAxMCBMIDMwIDMwIEwgMTAgMzAgWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsIDEwMiwgMjU1LCAwLjEpIiBzdHJva2Utd2lkdGg9IjAuNSI+PC9wYXRoPgo8L3BhdHRlcm4+CjwvZGVmcz4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSI+PC9yZWN0Pgo8L3N2Zz4=');
+            position: relative; /* Needed for absolute positioning of background elements */
+        }
+
+        /* Background Matrix Effect */
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Place behind other content */
+            opacity: 0.05; /* Subtle effect */
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            position: relative;
+            position: relative; /* Ensures content is above background */
             z-index: 1;
         }
-        
+
         /* Header Styles */
         header {
             text-align: center;
@@ -56,19 +63,19 @@
             0% { box-shadow: 0 0 5px var(--primary-color); }
             100% { box-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--secondary-color); }
         }
-        
+
         .student-info {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .student-info h3 {
             margin: 5px 0;
             font-weight: 300;
         }
-        
+
         h1 {
             font-size: 2.5rem;
             margin: 20px 0;
@@ -76,12 +83,12 @@
             text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
             animation: titleFade 2s ease-in-out;
         }
-        
+
         @keyframes titleFade {
             0% { opacity: 0; transform: translateY(-20px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-        
+
         /* Section Styles */
         section {
             margin: 40px 0;
@@ -95,19 +102,19 @@
             transform: translateY(20px);
             animation: fadeIn 1s ease-in-out forwards;
         }
-        
+
         @keyframes fadeIn {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
+
         section:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0, 102, 255, 0.3);
         }
-        
+
         h2 {
             color: var(--primary-color);
             margin-bottom: 20px;
@@ -115,7 +122,7 @@
             border-bottom: 1px solid var(--secondary-color);
             position: relative;
         }
-        
+
         h2::after {
             content: '';
             position: absolute;
@@ -126,22 +133,56 @@
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             animation: expandWidth 2s ease-in-out;
         }
-        
+
         @keyframes expandWidth {
             0% { width: 0; }
             100% { width: 100px; }
         }
-        
+
         p {
             margin-bottom: 15px;
-            animation: textFade 1s ease-in-out;
         }
-        
-        @keyframes textFade {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+
+            /* Image Styles */
+        /* Ubah CSS class image-comparison menjadi seperti ini */
+        .image-comparison {
+            display: flex;
+            flex-direction: column; /* Ini akan membuat gambar tersusun ke bawah */
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
         }
-        
+
+        /* Tidak perlu media query untuk flex-direction karena sekarang sudah column secara default */
+        @media (max-width: 768px) {
+            .image-comparison {
+                gap: 10px; /* Hanya mengubah gap saja pada layar kecil */
+            }
+        }
+        }
+
+        .image-container {
+            flex: 1;
+            min-width: 280px; /* Minimum width for each image container */
+            text-align: center;
+            background: rgba(0, 26, 51, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .image-container h3 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            border: 2px solid var(--primary-color);
+        }
+
         /* Code Block Styles */
         .code-block {
             background: var(--code-bg);
@@ -153,8 +194,9 @@
             border-left: 3px solid var(--accent-color);
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
             position: relative;
+            white-space: pre-wrap; /* Preserve whitespace and line breaks */
         }
-        
+
         .code-block::before {
             content: '$ Terminal';
             display: block;
@@ -165,16 +207,16 @@
             font-weight: bold;
             color: var(--light-color);
         }
-        
+
         .blink {
             animation: blink 1s steps(1) infinite;
         }
-        
+
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
-        
+
         /* References Styles */
         .references {
             margin-top: 50px;
@@ -182,25 +224,25 @@
             background: rgba(0, 26, 51, 0.5);
             border-radius: 5px;
         }
-        
+
         .references h2 {
             color: var(--primary-color);
             margin-bottom: 20px;
         }
-        
+
         .reference-item {
             margin-bottom: 10px;
             padding-left: 20px;
             position: relative;
         }
-        
+
         .reference-item::before {
             content: '•';
             position: absolute;
             left: 0;
             color: var(--secondary-color);
         }
-        
+
         /* Custom Cursor */
         .cursor {
             position: fixed;
@@ -214,7 +256,7 @@
             transition: width 0.3s, height 0.3s, border 0.3s;
             z-index: 9999;
         }
-        
+
         .cursor-dot {
             position: fixed;
             width: 5px;
@@ -225,136 +267,58 @@
             transform: translate(-50%, -50%);
             z-index: 9999;
         }
-        
-        /* Floating Elements */
-        .floating-element {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background-color: rgba(0, 102, 255, 0.1);
-            border-radius: 50%;
-            filter: blur(5px);
-            z-index: -1;
-            animation: float 10s linear infinite;
-        }
-        
-        @keyframes float {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(50px, 25px) rotate(90deg); }
-            50% { transform: translate(0, 50px) rotate(180deg); }
-            75% { transform: translate(-50px, 25px) rotate(270deg); }
-            100% { transform: translate(0, 0) rotate(360deg); }
-        }
-        
+
+        /* Floating Elements - Removed to avoid conflicts with matrix effect */
+
         /* Scrollbar Styles */
         ::-webkit-scrollbar {
             width: 10px;
             height: 10px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: var(--dark-color);
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: var(--secondary-color);
             border-radius: 5px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-color);
         }
-        
-        /* Image Container Styles */
-        .image-container {
-            margin: 30px 0;
-            padding: 15px;
-            background: rgba(0, 26, 51, 0.8);
-            border-radius: 8px;
-            border: 1px solid var(--secondary-color);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-        }
-        
-        .image-container:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 10px 25px rgba(0, 102, 255, 0.4);
-        }
-        
-        .image-placeholder {
-            width: 100%;
-            min-height: 300px;
-            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 255, 204, 0.1) 100%);
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-            font-size: 1.2rem;
-            text-align: center;
-            border: 2px dashed rgba(0, 255, 204, 0.3);
-        }
-        
-        .image-placeholder::before {
-            content: '📸';
-            display: block;
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-        
-        .image-source {
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: var(--light-color);
-            opacity: 0.7;
-            font-style: italic;
-            padding: 5px 10px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 4px;
-            display: inline-block;
-        }
-        
-        .image-caption {
-            margin-top: 15px;
-            text-align: center;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        
+
         /* Responsive Styles */
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
             }
-            
+
             h1 {
                 font-size: 2rem;
             }
-            
+
             section {
                 padding: 15px;
             }
-            
-            .floating-element {
-                display: none;
+
+            .image-comparison {
+                flex-direction: column;
+                gap: 10px;
             }
-            
-            .image-placeholder {
-                min-height: 200px;
+
+            .image-container {
+                min-width: unset;
             }
         }
     </style>
 </head>
 <body>
+    <canvas id="matrixCanvas"></canvas>
     <div class="cursor"></div>
     <div class="cursor-dot"></div>
-    
-    <div class="floating-element" style="top: 15%; left: 10%;"></div>
-    <div class="floating-element" style="top: 60%; left: 80%;"></div>
-    <div class="floating-element" style="top: 80%; left: 30%;"></div>
-    
+
     <div class="container">
         <header>
             <div class="student-info">
@@ -365,45 +329,128 @@
             </div>
             <h1>Upgrade RouterOS dan Firmware pada Perangkat MikroTik</h1>
         </header>
-        
+
         <main>
-            <!-- Image Container 1 -->
-            <div class="image-container">
-                <div class="image-placeholder">
-                    Gambar Perangkat MikroTik
+            <section id="upgrade-routeros-6-to-6" class="animate-section">
+                <h2>Update RouterOS: Versi 6.49.11 ke 6.49.19</h2>
+                <p>Untuk memperbarui perangkat MikroTik dari versi RouterOS 6.49.11 ke versi terbaru dari cabang 6 (yaitu 6.49.19), prosesnya tetap sama dengan versi sebelumnya. Perubahan ini umumnya bersifat perbaikan bug dan peningkatan stabilitas minor.</p>
+
+                <h3>Proses Update melalui CLI:</h3>
+                <ol>
+                    <li>Pastikan perangkat terhubung ke internet.</li>
+                    <li>Buka terminal atau Winbox CLI.</li>
+                    <li>Jalankan perintah untuk memeriksa pembaruan:
+                        <div class="code-block">
+                            [admin@MikroTik] &gt; /system package update check-for-updates
+                        </div>
+                    </li>
+                    <li>Jika ada pembaruan yang tersedia, periksa detailnya. Outputnya akan menunjukkan `latest-version: 6.49.19`.</li>
+                    <li>Jalankan perintah untuk mengunduh dan menginstal pembaruan:
+                        <div class="code-block">
+                            [admin@MikroTik] &gt; /system package update install
+                        </div>
+                    </li>
+                    <li>Setelah proses instalasi selesai, perangkat perlu di-reboot agar pembaruan diterapkan.
+                        <div class="code-block">
+                            [admin@MikroTik] &gt; system reboot
+                            Reboot, yes? [y/N]: y
+                        </div>
+                    </li>
+                </ol>
+
+                <h3>Gambar Ilustrasi (Sebelum dan Sesudah Update):</h3>
+                <div class="image-comparison">
+                    <div class="image-container">
+                        <h3>Sebelum Update (v6.49.11)</h3>
+                        <!-- Placeholder for image before update -->
+                        <img src="sebelum update.jpg" alt="MikroTik RouterOS v6.49.11">
+                    </div>
+                    <div class="image-container">
+                        <h3>Setelah Update (v6.49.19)</h3>
+                        <!-- Placeholder for image after update -->
+                        <img src="sesudah update.jpg" alt="MikroTik RouterOS v6.49.19">
+                    </div>
                 </div>
-                <div class="image-caption">Gambar 1: Perangkat Router MikroTik</div>
-                <div class="image-source">Sumber: [Masukkan Sumber Gambar Disini]</div>
-            </div>
-            
+                <p><em>Catatan: Gambar di atas adalah placeholder. Ganti 'placeholder_...' dengan URL gambar yang sebenarnya jika tersedia.</em></p>
+            </section>
+
+            <section id="upgrade-routeros-6-to-7" class="animate-section">
+                <h2>Upgrade RouterOS: Versi 6.49.19 ke 7.19.4</h2>
+                <p>Melakukan upgrade dari RouterOS v6 ke v7 adalah sebuah lompatan versi mayor. Proses ini tidak hanya memperbarui sistem operasi, tetapi juga bisa membawa perubahan signifikan pada fitur, konfigurasi, dan bahkan perilaku beberapa layanan. Sangat disarankan untuk membaca <strong>changelog</strong> versi target sebelum melakukan upgrade.</p>
+                <p>Untuk upgrade dari v6.49.19 ke 7.19.4 (atau versi stabil terbaru di cabang v7 saat Anda membaca ini), langkah-langkahnya sedikit berbeda dari update minor.</p>
+
+                <h3>Proses Upgrade dari v6 ke v7 melalui CLI:</h3>
+                <ol>
+                    <li><strong>Penting: Backup Konfigurasi!</strong>
+                        Sebelum memulai, lakukan backup konfigurasi lengkap.
+                        <div class="code-block">
+                            [admin@MikroTik] &gt; /export file=backup-before-v7-upgrade
+                        </div>
+                        Unduh file backup ini ke komputer Anda.
+                    </li>
+                    <li><strong>Periksa Channel Upgrade:</strong> Pastikan channel yang dipilih adalah 'bugfix' (untuk Long-term) atau 'current' (untuk Stable). Jika Anda sebelumnya hanya menggunakan v6, Anda mungkin perlu mengarahkan ke versi perantara terlebih dahulu seperti yang disebutkan dalam dokumentasi MikroTik. Namun, untuk skenario umum, cek-for-updates biasanya akan menampilkan versi v7 terbaru jika tersedia dan channelnya tepat.</li>
+                    <li>Jalankan perintah untuk memeriksa pembaruan (pastikan Anda terkoneksi ke internet):
+                        <div class="code-block">
+                            [admin@MikroTik] &gt; /system package update check-for-updates
+                        </div>
+                    </li>
+                    <li>Jika outputnya menunjukkan `latest-version: 7.19.4` (atau versi target Anda) dan statusnya "New version is available", lanjutkan ke langkah berikutnya.</li>
+                    <li>Jalankan perintah untuk mengunduh dan menginstal paket v7:
+                        <div class="code-block">
+                            [admin@MikroTik] &gt; /system package update install
+                        </div>
+                        Perintah ini akan mengunduh paket v7 dan memulai proses upgrade. Perangkat akan melakukan reboot secara otomatis setelah proses ini selesai.
+                    </li>
+                    <li><strong>Upgrade RouterBOARD Firmware:</strong> Setelah RouterOS berhasil diupgrade dan perangkat reboot, sangat disarankan untuk mengupgrade RouterBOARD firmware ke versi yang sesuai dengan RouterOS v7.
+                        <div class="code-block">
+                            [admin@MikroTik] &gt; /system routerboard upgrade
+                            Do you really want to upgrade firmware? [y/n]: y
+                        </div>
+                    </li>
+                    <li>Reboot perangkat kembali agar firmware RouterBOARD juga diterapkan.
+                        <div class="code-block">
+                            [admin@MikroTik] &gt; system reboot
+                            Reboot, yes? [y/N]: y
+                        </div>
+                    </li>
+                </ol>
+
+                <h3>Gambar Ilustrasi (Sebelum dan Sesudah Upgrade):</h3>
+                <div class="image-comparison">
+                    <div class="image-container">
+                        <h3>Sebelum Upgrade (v6.49.19)</h3>
+                        <!-- Placeholder for image before upgrade -->
+                        <img src="sebelum upgarde.jpg" alt="MikroTik RouterOS v6.49.19">
+                    </div>
+                    <div class="image-container">
+                        <h3>Setelah Upgrade (v7.19.4)</h3>
+                        <!-- Placeholder for image after upgrade -->
+                        <img src="sesudah upgrade.jpg" alt="MikroTik RouterOS v7.19.4">
+                    </div>
+                </div>
+                <p><em>Catatan: Gambar di atas adalah placeholder. Ganti 'placeholder_...' dengan URL gambar yang sebenarnya jika tersedia. Tampilan interface mungkin berbeda antara v6 dan v7.</em></p>
+            </section>
+
+            <!-- Bagian lain dari dokumen Anda bisa dilanjutkan di sini -->
             <section id="upgrade-routeros" class="animate-section">
                 <h2>Upgrade RouterOS melalui Command Line Interface (CLI)</h2>
                 <p>Dari sumber ShellHacks (2023), upgrade lengkap pada perangkat MikroTik memerlukan peningkatan dua komponen: 1️⃣ MikroTik RouterOS sebagai sistem operasi (OS), dan 2️⃣ MikroTik RouterBOARD firmware sebagai bootloader. Untuk melakukan upgrade RouterOS melalui command line (terminal), jalankan perintah berikut:</p>
-                
+
                 <div class="code-block">
                     [admin@MikroTik] &gt; /system package update check-for-updates
                 </div>
-                
+
                 <p>Dari sumber MiViLiSNet (2020), jika Anda hanya mengelola beberapa perangkat MikroTik, Anda dapat memperbarui mereka satu per satu menggunakan tool WinBox. Ini adalah tugas yang sangat mudah jika Anda hanya menginstal versi long-term. Versi tersebut jarang diperbarui dan hanya berisi perbaikan bug utama. Jika Anda memiliki jumlah perangkat yang lebih besar yang berada di bawah kendali Anda, Anda mungkin menginginkan lebih banyak otomatisasi. Kabar baiknya adalah Anda dapat menggunakan keajaiban command line untuk melakukan tugas tersebut.</p>
-                
-                <!-- Image Container 2 -->
-                <div class="image-container">
-                    <div class="image-placeholder">
-                        Screenshot Command Line Interface MikroTik
-                    </div>
-                    <div class="image-caption">Gambar 2: Interface CLI MikroTik</div>
-                    <div class="image-source">Sumber: [Masukkan Sumber Gambar Disini]</div>
-                </div>
-                
+
                 <p>Dari sumber Forum MikroTik (2021), untuk melakukan upgrade RouterOS melalui CLI, gunakan perintah berikut:</p>
-                
+
                 <div class="code-block">
                     /system package update check-for-updates;<br>
                     /system package update install;
                 </div>
-                
+
                 <p>Dari sumber ShellHacks (2023), output dari perintah check-for-updates akan menampilkan informasi seperti berikut:</p>
-                
+
                 <div class="code-block">
                     - sample output -<br>
                     channel: stable<br>
@@ -411,55 +458,46 @@
                     latest-version: 7.10.2<br>
                     status: New version is available
                 </div>
-                
+
                 <p>Dari sumber MiViLiSNet (2020), proses update akan selesai setelah reboot. Selama proses shutdown, RouterOS akan memeriksa file .npk baru pada disk lokal dan menginstalnya. Untuk me-reboot router dari command line, ketikkan perintah:</p>
-                
+
                 <div class="code-block">
                     [admin@MikroTik] &gt; system reboot<br>
                     Reboot, yes?<br>
                     [y/N]: y<br>
                     System will reboot shortly
                 </div>
-                
+
                 <p>Dari sumber MikroTik Documentation (2025), upgrading dari RouterOS v6 ke v7 dilakukan dengan cara yang sama seperti upgrading dalam rilis v6. Silahkan ikuti petunjuk upgrade untuk langkah-langkah yang lebih rinci.</p>
-                
+
                 <p>Dari sumber MikroTik Documentation (2025), jika Anda saat ini menjalankan RouterOS versi 6 atau lebih lama, kami sarankan untuk terlebih dahulu upgrade ke rilis stable atau long-term terbaru di v6. Perhatikan bahwa di RouterOS v6.x Anda, hanya RouterOS rilis 7.12.1 yang akan ditampilkan sebagai rilis terbaru. Anda harus upgrade ke versi ini terlebih dahulu dan baru kemudian upgrade lebih lanjut ke versi yang lebih baru akan tersedia. Pada sebagian besar pengaturan RouterOS yang berjalan baik dengan versi v6 yang disebutkan di atas, tidak diperlukan langkah tambahan. Upgrading ke v7 akan secara otomatis mengonversi konfigurasi dan perangkat Anda akan berfungsi dengan segera.</p>
-                
+
                 <p>Dari 3 pendapat tersebut dapat disimpulkan bahwa upgrade RouterOS melalui CLI dapat dilakukan dengan mudah menggunakan perintah /system package update check-for-updates untuk memeriksa pembaruan yang tersedia dan /system package update install untuk menginstal pembaruan tersebut, kemudian melakukan reboot perangkat. Proses upgrade dari versi v6 ke v7 memerlukan langkah tambahan dimana Anda harus terlebih dahulu upgrade ke versi 7.12.1.</p>
             </section>
-            
+
             <section id="upgrade-routerboot" class="animate-section">
                 <h2>Upgrade RouterBOOT Firmware melalui CLI</h2>
                 <p>Dari sumber MikroTik Documentation (2025), sangat disarankan untuk mengupgrade bootloader setelah update RouterOS. Untuk mengupgrade bootloader, jalankan perintah "/system routerboard upgrade" di CLI, diikuti dengan reboot. Alternatifnya, navigasikan ke menu GUI System → RouterBOARD dan klik tombol "Upgrade", kemudian reboot perangkat.</p>
-                
-                <!-- Image Container 3 -->
-                <div class="image-container">
-                    <div class="image-placeholder">
-                        Screenshot Proses Upgrade RouterBOOT
-                    </div>
-                    <div class="image-caption">Gambar 3: Proses Upgrade RouterBOOT Firmware</div>
-                    <div class="image-source">Sumber: [Masukkan Sumber Gambar Disini]</div>
-                </div>
-                
-                <p>Dari sumber ShellHacks (2023), setelah memperbarui MikroTik RouterOS, selalu disarankan untuk memperbarui firmware MikroTik RouterBOARD. Untuk memperbarui firmware MikroTik RouterBOARD menggunakan Winbox/Winfig, buka ⚙ "System" → "RouterBOARD" dan klik "Upgrade". Setelah upgrade firmware MikroTik RouterBOARD, reboot router agar perubahan diterapkan (⚙ "System" → "Reboot").</p>
-                
+
+                <p>Dari sumber ShellHacks (2023), setelah memperbarui MikroTik RouterOS, selalu disarankan untuk memperbarui firmware MikroTik RouterBOARD. Untuk memperbarui firmware MikroTik RouterBOARD menggunakan Winbox/Winfig, buka ⚙️ "System" → "RouterBOARD" dan klik "Upgrade". Setelah upgrade firmware MikroTik RouterBOARD, reboot router agar perubahan diterapkan (⚙️ "System" → "Reboot").</p>
+
                 <p>Dari sumber ShellHacks (2023), untuk upgrade firmware MikroTik RouterBOARD dari command-line (terminal), jalankan:</p>
-                
+
                 <div class="code-block">
                     [admin@MikroTik] &gt; /system routerboard print
                 </div>
-                
+
                 <p>Dari sumber MikroTik Documentation (2025), upgrade RouterBOOT biasanya mencakup perbaikan kecil pada operasi RouterBOARD secara keseluruhan. Disarankan untuk tetap mengupgrade versi ini. Jika Anda melihat bahwa nilai upgrade-firmware lebih besar dari firmware saat ini, Anda cukup melakukan perintah upgrade, menerimanya dengan y dan kemudian reboot dengan /system reboot:</p>
-                
+
                 <div class="code-block">
                     [admin@mikrotik] /system routerboard&gt; upgrade<br>
                     Do you really want to upgrade firmware?<br>
                     [y/n] y<br>
                     echo: system,info,critical Firmware upgraded successfully, please reboot for changes to take effect!
                 </div>
-                
+
                 <p>Dari sumber MiViLiSNet (2020), setiap perangkat RouterBoard memiliki BIOS atau firmware sendiri. Firmware tersebut harus diupgrade setelah upgrade RouterOS. File firmware yang lebih baru dikemas di dalam file npk dan akan tersedia setelah upgrade RouterOS. Untuk melakukan upgrade firmware, gunakan perintah berikut:</p>
-                
+
                 <div class="code-block">
                     [admin@MikroTik] &gt; system routerboard upgrade<br>
                     Do you really want to upgrade firmware?<br>
@@ -467,102 +505,66 @@
                     21:56:31 echo: system,info,critical Firmware upgraded successfully, please reboot for changes to take effect!<br>
                     [admin@MikroTik] &gt;
                 </div>
-                
+
                 <p>Dari sumber Forum MikroTik (2021), tidak mungkin untuk mengupgrade routerboot sebelum perangkat reboot ke versi ROS yang diupgrade. Satu-satunya jalan pintas yang dapat dilakukan adalah dengan menetapkan /system routerboard upgrade setelah upgrade ROS.</p>
-                
+
                 <p>Dari 5 pendapat tersebut dapat disimpulkan bahwa upgrade RouterBOOT firmware melalui CLI dapat dilakukan dengan perintah /system routerboard upgrade setelah upgrade RouterOS dan diikuti dengan reboot perangkat. Penting untuk diperhatikan bahwa upgrade RouterBOOT harus dilakukan setelah upgrade RouterOS dan reboot pertama, tidak dapat dilakukan dalam satu langkah.</p>
             </section>
-            
+
             <section id="script-automation" class="animate-section">
                 <h2>Otomatisasi Proses Upgrade dengan Script</h2>
                 <p>Dari sumber MikroTik Documentation (2025), Anda dapat mengotomatisasi proses upgrade dengan menjalankan script di system scheduler. Script ini menanyakan server upgrade MikroTik untuk versi baru, jika respons yang diterima mengatakan "New version is available", script kemudian mengeluarkan perintah upgrade di bawah ini. Anda dapat mengotomatisasi proses upgrade dengan menjalankan script di system scheduler. Script ini menanyakan server upgrade MikroTik untuk versi baru, jika respons yang diterima mengatakan "New version is available", script kemudian mengeluarkan perintah upgrade.</p>
-                
-                <!-- Image Container 4 -->
-                <div class="image-container">
-                    <div class="image-placeholder">
-                        Ilustrasi Automation Script MikroTik
-                    </div>
-                    <div class="image-caption">Gambar 4: Otomatisasi dengan Script pada MikroTik</div>
-                    <div class="image-source">Sumber: [Masukkan Sumber Gambar Disini]</div>
-                </div>
-                
+
                 <p>Dari sumber MikroTik Documentation (2025), berikut adalah contoh script untuk mengotomatisasi upgrade:</p>
-                
+
                 <div class="code-block">
                     [admin@MikroTik] &gt;/system package update check-for-updates once :delay 3s; :if ( [get status] = "New version is available") do={ install }
                 </div>
-                
+
                 <p>Dari sumber GitHub - spidermila/mikrotik_update (2025), ada tool command line yang mengotomatisasi update RouterOS pada armada perangkat Mikrotik. Tool ini akan terlebih dahulu melakukan backup perangkat dan mendownloadnya ke direktori lokal. Update dilakukan hanya jika backup dan download berhasil. Perilaku default tersebut dapat diganti dengan opsi -U atau -B. Tool ini menggunakan kunci ssh untuk mengautentikasi dengan perangkat Mikrotik.</p>
-                
+
                 <p>Dari sumber GitHub - spidermila/mikrotik_update (2025), menggunakan script otomatisasi dapat mencegah terputusnya koneksi SSH saat melakukan update pada perangkat Mikrotik. Dengan menggunakan wrapper sederhana yang menjalankan script update dalam screen, proses update dapat terus berjalan meskipun koneksi terputus, dan Anda dapat kembali ke sesi tersebut ketika koneksi dipulihkan.</p>
-                
+
                 <p>Dari 3 pendapat tersebut dapat disimpulkan bahwa proses upgrade RouterOS dan firmware dapat diotomatisasi menggunakan script baik di system scheduler MikroTik maupun tool eksternal. Script ini dapat memeriksa versi baru, melakukan backup konfigurasi, melakukan upgrade, dan me-reboot perangkat. Menggunakan screen atau tool serupa dapat mencegah terputusnya proses upgrade jika koneksi SSH terputus.</p>
             </section>
-            
+
             <section id="update-channels" class="animate-section">
                 <h2>Memilih Channel Update yang Tepat</h2>
                 <p>Dari sumber MikroTik Documentation (2025), versi RouterOS dirilis dalam beberapa "rantai rilis": Long term, Stable, Testing, dan Development. Saat mengupgrade RouterOS, Anda dapat memilih rantai rilis dari mana untuk menginstal paket baru. Long term: Dirilis jarang, dan hanya menyertakan perbaikan yang paling kritis, upgrade dalam satu cabang nomor tidak mengandung fitur baru.</p>
-                
-                <!-- Image Container 5 -->
-                <div class="image-container">
-                    <div class="image-placeholder">
-                        Ilustrasi Channel Update MikroTik
-                    </div>
-                    <div class="image-caption">Gambar 5: Channel Update pada RouterOS</div>
-                    <div class="image-source">Sumber: [Masukkan Sumber Gambar Disini]</div>
-                </div>
-                
+
                 <p>Dari sumber MikroTik Wiki (2025), Current mencakup perbaikan yang sama ditambah peningkatan dan fitur baru. Setelah rilis current diuji selama beberapa bulan, rilis tersebut dipromosikan ke bugfix-only dan tidak lagi diperbarui dengan fitur.</p>
-                
+
                 <p>Dari sumber MikroTik Wiki (2025), Release candidate dirilis beberapa kali per minggu. Mencakup fitur-fitur terbaru, dirilis tanpa pengujian intensif. Tidak direkomendasikan untuk produksi. Catatan: Sejak RouterOS v6.44beta6 channel rilis telah berganti nama - "bugfix" menjadi "long-term", "current" menjadi "stable" dan "release candidate" menjadi "testing".</p>
-                
+
                 <p>Dari sumber MikroTik Wiki (2025), saat mengupgrade RouterOS, Anda dapat memilih rantai rilis dari mana untuk menginstal paket baru. Untuk instalasi mission critical, rantai rilis bugfixes-only disarankan, karena tidak menyertakan fitur baru yang baru ditambahkan dan disimpan untuk waktu yang lama di halaman download, dengan hanya perbaikan kritis yang diterapkan padanya. Versi bugfixed-only adalah rilis paling stabil tanpa fitur baru, hanya perbaikan paling penting. Diperbarui jarang, hanya ketika masalah kritis ditemukan dalam rilis bugfixes-only. Current mencakup perbaikan yang sama ditambah peningkatan dan fitur baru. Setelah rilis current diuji selama beberapa bulan, rilis tersebut dipromosikan ke bugfix-only dan tidak lagi diperbarui dengan fitur.</p>
-                
+
                 <p>Dari 3 pendapat tersebut dapat disimpulkan bahwa MikroTik menawarkan beberapa channel update yang berbeda: Long-term (sebelumnya disebut bugfix), Stable (sebelumnya disebut current), dan Testing (sebelumnya disebut release candidate). Untuk lingkungan produksi dan sistem kritis, disarankan menggunakan channel Long-term yang lebih stabil dan hanya berisi perbaikan bug kritis. Channel Stable menyertakan fitur baru dan peningkatan, sementara channel Testing berisi fitur terbaru namun belum teruji secara intensif.</p>
             </section>
-            
+
             <section id="security-procedures" class="animate-section">
                 <h2>Prosedur Keamanan dalam Upgrade</h2>
                 <p>Dari sumber ShellHacks (2023), sebelum memulai upgrade router MikroTik, pastikan Anda memiliki backup konfigurasi router Anda saat ini, karena ini penting jika terjadi kesalahan selama proses upgrade.</p>
-                
-                <!-- Image Container 6 -->
-                <div class="image-container">
-                    <div class="image-placeholder">
-                        Ilustrasi Backup Konfigurasi MikroTik
-                    </div>
-                    <div class="image-caption">Gambar 6: Proses Backup Konfigurasi sebelum Upgrade</div>
-                    <div class="image-source">Sumber: [Masukkan Sumber Gambar Disini]</div>
-                </div>
-                
+
                 <p>Dari sumber MikroTik Wiki (2025), Catatan: Jangan mencabut daya saat router sedang diupgrade.</p>
-                
+
                 <p>Dari sumber Citraweb (2019), jika jaringan sudah stabil dengan menggunakan versi tertentu, akan lebih baik dipertahankan untuk menggunakan versi yang sama. Jangan terlalu sering upgrade/downgrade. Setiap versi memiliki kelebihan masing-masing dan terkadang hasilnya akan berbeda pada hardware yang berbeda. Biasakan membaca changelog. Hati-hati jika melakukan upgrade ke versi 6.20 atau yang lebih baru, khususnya pada Router yang menggunakan secondary storage.</p>
-                
+
                 <p>Dari sumber MikroTik Documentation (2025), catatan penting, ini tidak akan berfungsi, jika Anda menjalankannya untuk pertama kali pada rilis yang lebih lama. Mungkin tidak melihat versi terbaru sebagai tersedia, jika Anda menjalankan v6.x, Anda harus terlebih dahulu memilih saluran "Upgrade" secara manual untuk melakukan upgrade rilis utama ke versi perantara v7.12.1, dan hanya setelah itu rilis v7 yang lebih baru akan terlihat dalam saluran upgrade.</p>
-                
+
                 <p>Dari 4 pendapat tersebut dapat disimpulkan bahwa keamanan dalam proses upgrade meliputi: selalu membuat backup konfigurasi sebelum melakukan upgrade, tidak mencabut daya saat proses upgrade berlangsung, memahami changelog untuk mengetahui perubahan apa yang akan diterapkan, dan memperhatikan jalur upgrade yang benar (terutama saat upgrade versi mayor seperti dari v6 ke v7).</p>
             </section>
-            
+
             <section id="downgrade-routeros" class="animate-section">
                 <h2>Downgrade RouterOS jika Diperlukan</h2>
                 <p>Dari sumber Citraweb (2019), cara untuk melakukan downgrade cukup mudah. Seperti halnya proses upgrade, langkah pertama download terlebih dahulu modul RouterOS versi terdahulu yang diinginkan. Setelah selesai, "Copy & Paste" modul ke router menggunakan FTP. Selanjutnya, buka menu system -> packages maka akan muncul package list seperti pada gambar berikut ini: Klik Downgrade, lalu "yes" untuk perintah reboot. Setelah Router menyala kembali, sudah akan menggunakan versi RouterOS yang diinginkan.</p>
-                
-                <!-- Image Container 7 -->
-                <div class="image-container">
-                    <div class="image-placeholder">
-                        Screenshot Proses Downgrade RouterOS
-                    </div>
-                    <div class="image-caption">Gambar 7: Proses Downgrade RouterOS</div>
-                    <div class="image-source">Sumber: [Masukkan Sumber Gambar Disini]</div>
-                </div>
-                
+
                 <p>Dari sumber MikroTik Wiki (2025), juga dimungkinkan untuk menggunakan backup booter dengan menyalakan perangkat, dengan tombol RESET ditekan. Terkadang RouterBOOT menerima upgrade firmware (lihat Changelog). Hanya mungkin untuk mengupgrade RouterBOOT utama, jadi jika terjadi kegagalan, Anda dapat menggunakan backup booter untuk memulai perangkat dan menurunkan versi loader utama.</p>
-                
+
                 <p>Dari sumber MikroTik Wiki (2025), perintah ini menunjukkan versi RouterBOOT saat ini dari perangkat Anda, dan upgrade yang tersedia yang termasuk dalam paket routerboard.npk, atau jika Anda mengunggah file FWF yang sesuai dengan model perangkat. Catatan: Downgrade juga dimungkinkan dengan mengunggah file *.FWF dengan versi yang lebih lama.</p>
-                
+
                 <p>Dari 3 pendapat tersebut dapat disimpulkan bahwa jika diperlukan, RouterOS dapat di-downgrade ke versi sebelumnya dengan cara mendownload modul RouterOS versi yang diinginkan, meng-copy ke router, dan menggunakan opsi Downgrade di menu system -> packages. Untuk RouterBOOT, downgrade dapat dilakukan dengan mengunggah file FWF dengan versi yang lebih lama atau menggunakan backup booter dengan menekan tombol RESET saat menyalakan perangkat.</p>
             </section>
-            
+
             <section id="references" class="references animate-section">
                 <h2>Daftar Pustaka</h2>
                 <div class="reference-item">
@@ -598,176 +600,135 @@
             </section>
         </main>
     </div>
-    
+
     <script>
+        // Matrix Rain Effect Canvas
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        const characters = '01'; // For a binary matrix effect
+        const fontSize = 14;
+        const columns = width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        const drawMatrix = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Fading effect
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.fillStyle = '#00ffcc'; // Primary color for characters
+            ctx.font = `${fontSize}px monospace`;
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > height && Math.random() > 0.975) {
+                    drops[i] = 0; // Reset drop when it goes off screen
+                }
+                drops[i]++;
+            }
+        };
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            const newColumns = width / fontSize;
+            // Adjust drops array if column count changes
+            while (drops.length < newColumns) {
+                drops.push(1);
+            }
+            if (drops.length > newColumns) {
+                drops.length = newColumns;
+            }
+            for(let i = 0; i < drops.length; i++){ // Ensure all drops are initialized properly after resize
+                if(drops[i] === undefined) drops[i] = 1;
+            }
+        });
+
+        setInterval(drawMatrix, 33); // ~30 FPS
+
         // Custom Cursor
         const cursor = document.querySelector('.cursor');
         const cursorDot = document.querySelector('.cursor-dot');
-        
+
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
-            
+
             cursorDot.style.left = e.clientX + 'px';
             cursorDot.style.top = e.clientY + 'px';
         });
-        
+
         document.addEventListener('mousedown', () => {
             cursor.style.width = '15px';
             cursor.style.height = '15px';
             cursor.style.borderColor = 'var(--accent-color)';
         });
-        
+
         document.addEventListener('mouseup', () => {
             cursor.style.width = '20px';
             cursor.style.height = '20px';
             cursor.style.borderColor = 'var(--primary-color)';
         });
-        
+
         // Typing animation for code blocks
         document.querySelectorAll('.code-block').forEach((block, index) => {
             const text = block.innerHTML;
             block.innerHTML = '';
-            
-            const typeCode = (i) => {
-                if (i < text.length) {
-                    block.innerHTML += text.charAt(i);
-                    setTimeout(() => typeCode(i + 1), Math.random() * 10 + 5);
+            let charIndex = 0;
+            let isFirstBlock = true;
+
+            const typeCode = () => {
+                if (charIndex < text.length) {
+                    // Handle line breaks properly
+                    if (text.charAt(charIndex) === '<' && text.substring(charIndex, charIndex + 4) === '<br>') {
+                        block.innerHTML += '<br>';
+                        charIndex += 4; // Skip the <br> tag
+                    } else {
+                        block.innerHTML += text.charAt(charIndex);
+                        charIndex++;
+                    }
+                    setTimeout(typeCode, Math.random() * 10 + 5);
                 } else {
-                    block.innerHTML += '<span class="blink">█</span>';
+                    block.innerHTML += '<span class="blink">█</span>'; // Blinking cursor
                 }
             };
-            
+
             // Delay the typing effect based on the index of the code block
+            // Add a slightly longer delay for the first code block to appear more naturally
+            const delay = index === 0 ? 1000 : index * 1000 + 1000;
             setTimeout(() => {
-                typeCode(0);
-            }, index * 1000 + 1000);
+                typeCode();
+            }, delay);
         });
-        
+
+
         // Animation for sections on scroll
         const animateSections = () => {
             const sections = document.querySelectorAll('.animate-section');
-            
+
             sections.forEach((section) => {
                 const sectionTop = section.getBoundingClientRect().top;
-                const sectionBottom = section.getBoundingClientRect().bottom;
                 const windowHeight = window.innerHeight;
-                
-                if (sectionTop < windowHeight - 100 && sectionBottom > 0) {
+
+                // Trigger animation when section is partially in view
+                if (sectionTop < windowHeight - 100) {
                     section.style.opacity = '1';
                     section.style.transform = 'translateY(0)';
                 }
             });
         };
-        
-        // Animation for image containers
-        const animateImages = () => {
-            const images = document.querySelectorAll('.image-container');
-            
-            images.forEach((image) => {
-                const imageTop = image.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                
-                if (imageTop < windowHeight - 100) {
-                    image.style.opacity = '1';
-                    image.style.transform = 'translateY(0)';
-                }
-            });
-        };
-        
+
         // Call animation function on load and scroll
-        window.addEventListener('load', () => {
-            animateSections();
-            animateImages();
-        });
-        
-        window.addEventListener('scroll', () => {
-            animateSections();
-            animateImages();
-        });
-        
-        // Create more floating elements
-        const createFloatingElements = () => {
-            const container = document.querySelector('.container');
-            
-            for (let i = 0; i < 5; i++) {
-                const element = document.createElement('div');
-                element.classList.add('floating-element');
-                
-                element.style.width = Math.random() * 50 + 50 + 'px';
-                element.style.height = element.style.width;
-                element.style.top = Math.random() * 100 + '%';
-                element.style.left = Math.random() * 100 + '%';
-                element.style.animationDelay = Math.random() * 5 + 's';
-                element.style.animationDuration = Math.random() * 10 + 10 + 's';
-                
-                const hue = Math.random() * 60 + 180; // Blue-green range
-                element.style.backgroundColor = hsla(${hue}, 100%, 50%, 0.1);
-                
-                document.body.appendChild(element);
-            }
-        };
-        
-        createFloatingElements();
-        
-        // Matrix rain effect
-        const createMatrixRain = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            canvas.style.position = 'fixed';
-            canvas.style.top = '0';
-            canvas.style.left = '0';
-            canvas.style.zIndex = '-2';
-            canvas.style.opacity = '0.05';
-            document.body.appendChild(canvas);
-            
-            const ctx = canvas.getContext('2d');
-            const characters = '01';
-            const fontSize = 14;
-            const columns = canvas.width / fontSize;
-            const drops = [];
-            
-            for (let i = 0; i < columns; i++) {
-                drops[i] = 1;
-            }
-            
-            const draw = () => {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#00ffcc';
-                ctx.font = ${fontSize}px monospace;
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const text = characters.charAt(Math.floor(Math.random() * characters.length));
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    
-                    drops[i]++;
-                }
-            };
-            
-            setInterval(draw, 33);
-        };
-        
-        createMatrixRain();
-        
-        // Hover effect for image containers
-        document.querySelectorAll('.image-container').forEach(container => {
-            container.addEventListener('mouseenter', () => {
-                container.style.transform = 'translateY(-5px) scale(1.01)';
-                container.style.boxShadow = '0 10px 25px rgba(0, 102, 255, 0.4)';
-            });
-            
-            container.addEventListener('mouseleave', () => {
-                container.style.transform = '';
-                container.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.5)';
-            });
-        });
+        window.addEventListener('load', animateSections);
+        window.addEventListener('scroll', animateSections);
+
     </script>
 </body>
 </html>
